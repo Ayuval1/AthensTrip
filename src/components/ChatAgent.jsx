@@ -28,11 +28,18 @@ export default function ChatAgent() {
         body: JSON.stringify({ messages: newMessages }),
       })
       const data = await res.json()
-      setMessages(prev => [...prev, { role: 'model', parts: [{ text: data.text }] }])
-    } catch {
+      if (!res.ok) {
+        setMessages(prev => [...prev, {
+          role: 'model',
+          parts: [{ text: `שגיאה: ${data.error || res.status}` }],
+        }])
+      } else {
+        setMessages(prev => [...prev, { role: 'model', parts: [{ text: data.text }] }])
+      }
+    } catch (err) {
       setMessages(prev => [...prev, {
         role: 'model',
-        parts: [{ text: 'אופס, משהו לא עבד. נסו שוב.' }],
+        parts: [{ text: `שגיאת רשת: ${err.message}` }],
       }])
     } finally {
       setLoading(false)
