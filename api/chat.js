@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   try {
     const genAI = new GoogleGenerativeAI(apiKey)
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       systemInstruction: ATHENS_SYSTEM_PROMPT,
     })
 
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({ text })
   } catch (err) {
-    console.error('Gemini error:', err)
-    res.status(500).json({ error: 'שגיאה בשרת, נסו שוב' })
+    console.error('Gemini error full:', err?.message, err?.status, JSON.stringify(err))
+    res.status(500).json({ error: err?.message || 'שגיאה בשרת' })
   }
 }
