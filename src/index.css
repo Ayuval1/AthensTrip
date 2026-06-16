@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Heebo:wght@400;500&display=swap');
+@import 'leaflet/dist/leaflet.css';
+@import "tailwindcss";
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Heebo', sans-serif;
+  direction: rtl;
+  background: #F5F0E8;
+  color: #0D2644;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3 {
+  font-family: 'Rubik', sans-serif;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.meander {
+  background-image: repeating-linear-gradient(
+    90deg,
+    #1B4F8C 0px, #1B4F8C 4px,
+    transparent 4px, transparent 8px
+  );
+  height: 3px;
+  opacity: 0.3;
+  width: 100%;
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 12px;
+}
