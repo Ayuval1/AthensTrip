@@ -23,10 +23,9 @@ export default async function handler(req, res) {
       systemInstruction: ATHENS_SYSTEM_PROMPT,
     })
 
-    const history = messages.slice(0, -1).map(m => ({
-      role: m.role,
-      parts: m.parts,
-    }))
+    const rawHistory = messages.slice(0, -1).map(m => ({ role: m.role, parts: m.parts }))
+    const firstUserIdx = rawHistory.findIndex(m => m.role === 'user')
+    const history = firstUserIdx >= 0 ? rawHistory.slice(firstUserIdx) : []
 
     const lastMessage = messages[messages.length - 1].parts[0].text
 
