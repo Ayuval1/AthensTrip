@@ -11,6 +11,7 @@ const CATEGORY_COLORS = {
   shopping: '#9B59B6',
   fun: '#2980B9',
   supermarket: '#00897B',
+  transit: '#D81B60',
 }
 
 const CATEGORY_LABELS = {
@@ -20,6 +21,7 @@ const CATEGORY_LABELS = {
   shopping: '🛍️ קניות',
   fun: '🎉 בילוי',
   supermarket: '🛒 סופרים',
+  transit: '🚇 תחבורה',
 }
 
 function makeIcon(color, emoji) {
@@ -57,6 +59,7 @@ const CATEGORY_EMOJIS = {
   shopping: '🛍️',
   fun: '🎉',
   supermarket: '🛒',
+  transit: '🚇',
 }
 
 export default function InteractiveMap() {
@@ -113,12 +116,16 @@ export default function InteractiveMap() {
         <button
           onClick={handleLocate}
           disabled={locating}
-          className="absolute z-10 text-xs px-3 py-2 rounded-xl font-medium"
+          className="text-xs px-3 py-2 rounded-xl font-medium"
           style={{
-            bottom: '24px', left: '24px',
+            position: 'absolute',
+            bottom: '20px', left: '20px',
+            zIndex: 1000,
             background: userPos ? '#27AE60' : '#1B4F8C',
             color: 'white',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+            border: 'none',
+            cursor: 'pointer',
           }}
         >
           {locating ? '⏳' : '📍'} {locating ? 'מאתר...' : 'מיקומי'}
@@ -164,7 +171,7 @@ export default function InteractiveMap() {
             <Marker
               key={attraction.id}
               position={attraction.coords}
-              icon={makeIcon(CATEGORY_COLORS[attraction.category], CATEGORY_EMOJIS[attraction.category])}
+              icon={makeIcon(CATEGORY_COLORS[attraction.category], attraction.emoji || CATEGORY_EMOJIS[attraction.category])}
               eventHandlers={{ click: () => setModalId(attraction.id) }}
             >
               <Popup>
