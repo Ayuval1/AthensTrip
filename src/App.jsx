@@ -3,6 +3,7 @@ import DayItinerary from './components/DayItinerary'
 import InteractiveMap from './components/InteractiveMap'
 import PracticalInfo from './components/PracticalInfo'
 import ChatAgent from './components/ChatAgent'
+import Wallet from './components/Wallet'
 import './index.css'
 
 const TABS = [
@@ -10,6 +11,7 @@ const TABS = [
   { id: 'map', label: 'מפה', icon: '🗺️' },
   { id: 'info', label: 'מידע', icon: 'ℹ️' },
   { id: 'chat', label: "צ'אט", icon: '💬' },
+  { id: 'wallet', label: 'ארנק', icon: '💰' },
 ]
 
 export default function App() {
@@ -43,6 +45,7 @@ export default function App() {
             <ChatAgent />
           </div>
         )}
+        {tab === 'wallet' && <Wallet />}
       </main>
 
       <nav style={{

@@ -11,7 +11,8 @@ const CATEGORY_COLORS = {
   shopping: '#9B59B6',
   fun: '#2980B9',
   supermarket: '#00897B',
-  transit: '#D81B60',
+  metro: '#D81B60',
+  bus: '#7B1FA2',
 }
 
 const CATEGORY_LABELS = {
@@ -21,7 +22,8 @@ const CATEGORY_LABELS = {
   shopping: '🛍️ קניות',
   fun: '🎉 בילוי',
   supermarket: '🛒 סופרים',
-  transit: '🚇 תחבורה',
+  metro: '🚇 מטרו',
+  bus: '🚌 אוטובוס',
 }
 
 function makeIcon(color, emoji) {
@@ -59,7 +61,8 @@ const CATEGORY_EMOJIS = {
   shopping: '🛍️',
   fun: '🎉',
   supermarket: '🛒',
-  transit: '🚇',
+  metro: '🚇',
+  bus: '🚌',
 }
 
 export default function InteractiveMap() {
