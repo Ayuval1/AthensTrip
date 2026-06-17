@@ -105,7 +105,7 @@ export default function InteractiveMap() {
           setMapClickHandler={setMapClickHandler}
         />
 
-        <MapContainer ref={mapRef} center={[37.9715, 23.7267]} zoom={14}
+        <MapContainer ref={mapRef} center={[37.9715, 23.7267]} zoom={14} attributionControl={false}
           style={{ height: '100%', minHeight: '400px', borderRadius: '16px', cursor: mapClickHandler ? 'crosshair' : 'grab' }}>
           <TileLayer
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
