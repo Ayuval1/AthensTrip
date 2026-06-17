@@ -4,6 +4,7 @@ import InteractiveMap from './components/InteractiveMap'
 import PracticalInfo from './components/PracticalInfo'
 import ChatAgent from './components/ChatAgent'
 import Wallet from './components/Wallet'
+import PackingList from './components/PackingList'
 import './index.css'
 
 const TABS = [
@@ -12,6 +13,7 @@ const TABS = [
   { id: 'info', label: 'מידע', icon: 'ℹ️' },
   { id: 'chat', label: "צ'אט", icon: '💬' },
   { id: 'wallet', label: 'ארנק', icon: '💰' },
+  { id: 'packing', label: 'מזוודה', icon: '🧳' },
 ]
 
 export default function App() {
@@ -46,6 +48,7 @@ export default function App() {
           </div>
         )}
         {tab === 'wallet' && <Wallet />}
+        {tab === 'packing' && <PackingList />}
       </main>
 
       <nav style={{
