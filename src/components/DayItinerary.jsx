@@ -11,10 +11,10 @@ export default function DayItinerary() {
   const [editingEvent, setEditingEvent] = useState(null)
   const [editForm, setEditForm] = useState({ time: '', title: '', important: false })
   const [saving, setSaving] = useState(false)
-  const [saveError, setSaveError] = useState(false)
+  const [saveStatus, setSaveStatus] = useState(null) // 'ok' | 'error' | null
 
   useEffect(() => {
-    fetch('/api/itinerary')
+    fetch('/itinerary.json?v=' + Date.now())
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (Array.isArray(data) && data.length) setItinerary(data) })
       .catch(() => {})
@@ -26,13 +26,13 @@ export default function DayItinerary() {
     const event = itinerary[dayIdx].events[eventIdx]
     setEditForm({ time: event.time, title: event.title, important: event.important || false })
     setEditingEvent({ dayIdx, eventIdx })
-    setSaveError(false)
+    setSaveStatus(null)
   }
 
   function openAddEvent(dayIdx) {
     setEditForm({ time: '', title: '', important: false })
     setEditingEvent({ dayIdx, eventIdx: -1 })
-    setSaveError(false)
+    setSaveStatus(null)
   }
 
   async function saveEdit() {
@@ -43,12 +43,16 @@ export default function DayItinerary() {
       if (di !== dayIdx) return d
       let newEvents
       if (eventIdx === -1) {
-        newEvents = [...d.events, { time: editForm.time, title: editForm.title, important: editForm.important || undefined }]
+        newEvents = [...d.events, {
+          time: editForm.time,
+          title: editForm.title,
+          ...(editForm.important ? { important: true } : {}),
+        }]
         newEvents.sort((a, b) => a.time.localeCompare(b.time))
       } else {
         newEvents = d.events.map((ev, ei) =>
           ei === eventIdx
-            ? { ...ev, time: editForm.time, title: editForm.title, important: editForm.important || undefined }
+            ? { ...ev, time: editForm.time, title: editForm.title, ...(editForm.important ? { important: true } : { important: undefined }) }
             : ev
         )
       }
@@ -56,9 +60,9 @@ export default function DayItinerary() {
     })
 
     setSaving(true)
-    setSaveError(false)
+    setSaveStatus(null)
     try {
-      const r = await fetch('/api/itinerary', {
+      const r = await fetch('/api/update-itinerary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newItinerary),
@@ -66,11 +70,13 @@ export default function DayItinerary() {
       if (r.ok) {
         setItinerary(newItinerary)
         setEditingEvent(null)
+        setSaveStatus('ok')
+        setTimeout(() => setSaveStatus(null), 6000)
       } else {
-        setSaveError(true)
+        setSaveStatus('error')
       }
     } catch {
-      setSaveError(true)
+      setSaveStatus('error')
     } finally {
       setSaving(false)
     }
@@ -85,9 +91,8 @@ export default function DayItinerary() {
     )
 
     setSaving(true)
-    setSaveError(false)
     try {
-      const r = await fetch('/api/itinerary', {
+      const r = await fetch('/api/update-itinerary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newItinerary),
@@ -95,11 +100,13 @@ export default function DayItinerary() {
       if (r.ok) {
         setItinerary(newItinerary)
         setEditingEvent(null)
+        setSaveStatus('ok')
+        setTimeout(() => setSaveStatus(null), 6000)
       } else {
-        setSaveError(true)
+        setSaveStatus('error')
       }
     } catch {
-      setSaveError(true)
+      setSaveStatus('error')
     } finally {
       setSaving(false)
     }
@@ -151,8 +158,8 @@ export default function DayItinerary() {
               חשוב (מסמן בזהב)
             </label>
 
-            {saveError && (
-              <p className="text-xs mb-3 text-red-500">שגיאה בשמירה — בדקו הגדרות JSONBin</p>
+            {saveStatus === 'error' && (
+              <p className="text-xs mb-3" style={{ color: '#DC2626' }}>שגיאה — בדקו הגדרות GitHub</p>
             )}
 
             <div className="flex gap-2">
@@ -223,6 +230,13 @@ export default function DayItinerary() {
       <div className="px-4 pt-4 pb-2">
         <WeatherWidget />
       </div>
+
+      {/* Save success banner */}
+      {saveStatus === 'ok' && (
+        <div className="mx-4 mb-2 px-3 py-2 rounded-xl text-xs text-center" style={{ background: '#D1FAE5', color: '#065F46' }}>
+          ✅ נשמר! שינויים יעלו לכולם תוך ~60 שניות
+        </div>
+      )}
 
       <div className="meander mx-4 my-3" />
 
