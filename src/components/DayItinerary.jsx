@@ -1,17 +1,48 @@
 import { useState } from 'react'
-import { ITINERARY, ATTRACTIONS } from '../data/athens'
+import { ITINERARY, ATTRACTIONS, APARTMENT } from '../data/athens'
 import WeatherWidget from './WeatherWidget'
 import AttractionModal from './AttractionModal'
 
 export default function DayItinerary() {
   const [selectedDay, setSelectedDay] = useState(0)
   const [modalId, setModalId] = useState(null)
+  const [showApartment, setShowApartment] = useState(false)
 
   const day = ITINERARY[selectedDay]
 
   return (
     <div className="flex flex-col h-full">
       {modalId && <AttractionModal attractionId={modalId} onClose={() => setModalId(null)} />}
+
+      {showApartment && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center"
+          style={{ background: 'rgba(0,0,0,0.4)' }}
+          onClick={() => setShowApartment(false)}
+        >
+          <div
+            className="bg-white w-full max-w-sm rounded-t-2xl p-6 pb-10"
+            style={{ direction: 'rtl' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="text-xl mb-1" style={{ fontFamily: 'Rubik', color: '#0D2644' }}>🏠 הדירה שלנו</div>
+            <div className="text-sm mb-1" style={{ color: '#4A90D9' }}>{APARTMENT.neighborhood}</div>
+            <div className="text-sm font-medium mb-4" style={{ color: '#0D2644' }}>{APARTMENT.address}</div>
+            <ul className="text-sm mb-5 flex flex-col gap-1.5" style={{ color: '#555' }}>
+              {APARTMENT.notes.map((n, i) => <li key={i}>• {n}</li>)}
+            </ul>
+            <a
+              href={`https://maps.google.com/?q=${encodeURIComponent(APARTMENT.address)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-center py-3 rounded-xl text-sm font-medium"
+              style={{ background: '#1B4F8C', color: 'white', textDecoration: 'none' }}
+            >
+              📍 ניווט ב-Google Maps
+            </a>
+          </div>
+        </div>
+      )}
 
       <div className="px-4 pt-4 pb-2">
         <WeatherWidget />
@@ -71,6 +102,15 @@ export default function DayItinerary() {
                       style={{ background: 'rgba(27,79,140,0.1)', color: '#1B4F8C' }}
                     >
                       פרטים על {attraction.name} ←
+                    </button>
+                  )}
+                  {!attraction && (event.title.includes('דירה') || event.title.includes('קולונקי')) && (
+                    <button
+                      onClick={() => setShowApartment(true)}
+                      className="text-xs mt-1 px-2 py-0.5 rounded-lg"
+                      style={{ background: 'rgba(27,79,140,0.1)', color: '#1B4F8C' }}
+                    >
+                      כתובת הדירה ←
                     </button>
                   )}
                 </div>
