@@ -83,7 +83,7 @@ export const ATTRACTIONS = [
     id: 'acropolis',
     name: 'אקרופוליס',
     nameEl: 'Acropolis',
-    coords: [37.9717, 23.7263],
+    coords: [37.9698, 23.7262],
     category: 'historical',
     description: 'אחד ממבנה העתיקים המרשימים בעולם — מקדש הפרתנון על הגבעה המפורסמת. תצפית מדהימה על כל אתונה.',
     hours: 'פתוח 08:00–20:00 (בקיץ)',
