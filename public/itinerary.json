@@ -1,0 +1,72 @@
+[
+  {
+    "date": "19/6",
+    "day": "שישי",
+    "emoji": "✈️",
+    "title": "הגעה",
+    "events": [
+      { "time": "07:30", "title": "המראה מחיפה" },
+      { "time": "10:00", "title": "נחיתה באתונה ✅" },
+      { "time": "12:00", "title": "הגעה לדירה בקולונקי — השאירו מזוודות" },
+      { "time": "13:00", "title": "צהריים + קניות בסופר", "attractionId": "souvlaki" },
+      { "time": "15:00", "title": "מנוחה בדירה" },
+      { "time": "19:00", "title": "פוניקולר לגבעת ליקאביטוס — תצפית שקיעה", "attractionId": "lycabettus" },
+      { "time": "21:00", "title": "שיטוט בשכונת קולונקי + ארוחת ערב" }
+    ]
+  },
+  {
+    "date": "20/6",
+    "day": "שבת",
+    "emoji": "🏛️",
+    "title": "קניות + אקרופוליס + פלאקה",
+    "events": [
+      { "time": "09:00", "title": "קניות ברחוב ארמו", "attractionId": "ermou" },
+      { "time": "10:30", "title": "מוזיאון האשליות", "attractionId": "museum-of-illusions" },
+      { "time": "13:00", "title": "צהריים בסביבת פלאקה", "attractionId": "souvlaki" },
+      { "time": "15:00", "title": "מנוחה / שוטטות בפלאקה", "attractionId": "plaka" },
+      { "time": "17:00", "title": "⚠️ אקרופוליס — כרטיסים לחמש!", "attractionId": "acropolis", "important": true },
+      { "time": "19:30", "title": "ירידה לשכונת פלאקה + ארוחת ערב", "attractionId": "plaka" }
+    ]
+  },
+  {
+    "date": "21/6",
+    "day": "ראשון",
+    "emoji": "🏟️",
+    "title": "סינטגמה + שוק פשפשים",
+    "events": [
+      { "time": "08:30", "title": "קלימרמרו — אצטדיון אולימפי, לרוץ שם!", "attractionId": "kallimarmaro" },
+      { "time": "10:00", "title": "הליכה דרך גנים זאפיו", "attractionId": "zappeion" },
+      { "time": "11:00", "title": "🎖️ טקס חילופי משמר המלא — כיכר סינטגמה", "attractionId": "syntagma", "important": true },
+      { "time": "13:00", "title": "צהריים ליד סינטגמה", "attractionId": "souvlaki" },
+      { "time": "15:00", "title": "שוק פשפשים — מונסטיראקי", "attractionId": "monastiraki" },
+      { "time": "18:00", "title": "שוטטות / מוזיאון" }
+    ]
+  },
+  {
+    "date": "22/6",
+    "day": "שני",
+    "emoji": "⛵",
+    "title": "יום באי",
+    "events": [
+      { "time": "07:30", "title": "יציאה לפיראוס במטרו" },
+      { "time": "08:30", "title": "⛴️ מעבורת לאגינה / אגיסטרי — להזמין מראש!", "attractionId": "aegina", "important": true },
+      { "time": "10:00", "title": "הגעה לאי — חוף ים!" },
+      { "time": "13:00", "title": "צהריים דגים בנמל" },
+      { "time": "16:00", "title": "מעבורת חזרה" },
+      { "time": "18:30", "title": "הגעה לאתונה, מנוחה" }
+    ]
+  },
+  {
+    "date": "23/6",
+    "day": "שלישי",
+    "emoji": "🦕",
+    "title": "XPLORE + טיסה",
+    "events": [
+      { "time": "09:00", "title": "ארוחת בוקר נינוחה" },
+      { "time": "10:00", "title": "🦕 XPLORE / מוזיאון אולימפי — לבחור!", "attractionId": "xplore" },
+      { "time": "13:00", "title": "צהריים + קפה אחרון" },
+      { "time": "15:00", "title": "🚕 יציאה לנמל התעופה (מונית)" },
+      { "time": "18:05", "title": "✈️ המראה חזרה לחיפה" }
+    ]
+  }
+]
