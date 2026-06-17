@@ -24,7 +24,7 @@ export default function App() {
             <h1 style={{ fontFamily: 'Rubik', color: '#0D2644', fontSize: '20px', fontWeight: 500, margin: 0, lineHeight: 1.2 }}>
               אתונה 2026
             </h1>
-            <p style={{ color: '#4A90D9', fontSize: '12px', margin: 0 }}>19–23 יוני • משפחת אמר</p>
+            <p style={{ color: '#4A90D9', fontSize: '12px', margin: 0 }}>19–23 יוני • משפחת עמר</p>
           </div>
         </div>
         <div className="meander" style={{ marginTop: '12px' }} />

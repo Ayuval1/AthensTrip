@@ -113,23 +113,35 @@ export default function InteractiveMap() {
       </div>
 
       <div className="flex-1 px-3 pb-3 relative">
-        <button
-          onClick={handleLocate}
-          disabled={locating}
-          className="text-xs px-3 py-2 rounded-xl font-medium"
-          style={{
-            position: 'absolute',
-            bottom: '20px', left: '20px',
-            zIndex: 1000,
-            background: userPos ? '#27AE60' : '#1B4F8C',
-            color: 'white',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-            border: 'none',
-            cursor: 'pointer',
-          }}
-        >
-          {locating ? '⏳' : '📍'} {locating ? 'מאתר...' : 'מיקומי'}
-        </button>
+        <div style={{ position: 'absolute', bottom: '20px', left: '20px', zIndex: 1000, display: 'flex', gap: '8px' }}>
+          <button
+            onClick={handleLocate}
+            disabled={locating}
+            className="text-xs px-3 py-2 rounded-xl font-medium"
+            style={{
+              background: userPos ? '#27AE60' : '#1B4F8C',
+              color: 'white',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            {locating ? '⏳' : '📍'} {locating ? 'מאתר...' : 'מיקומי'}
+          </button>
+          <button
+            onClick={() => mapRef.current?.flyTo(APARTMENT.coords, 17)}
+            className="text-xs px-3 py-2 rounded-xl font-medium"
+            style={{
+              background: '#C9A84C',
+              color: 'white',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            🏠 דירה
+          </button>
+        </div>
 
         <MapContainer
           ref={mapRef}
@@ -160,8 +172,27 @@ export default function InteractiveMap() {
               pathOptions={{ color: '#1B4F8C', fillColor: '#4A90D9', fillOpacity: 0.85, weight: 2 }}
             >
               <Popup>
-                <div style={{ fontFamily: 'Heebo', direction: 'rtl', textAlign: 'right' }}>
+                <div style={{ fontFamily: 'Heebo', direction: 'rtl', textAlign: 'right', minWidth: '140px' }}>
                   <strong>📍 אתם כאן</strong>
+                  <br />
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&origin=${userPos[0]},${userPos[1]}&destination=${APARTMENT.coords[0]},${APARTMENT.coords[1]}&travelmode=walking`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-block',
+                      marginTop: '6px',
+                      background: '#C9A84C',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '4px 10px',
+                      fontSize: '12px',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    🏠 מסלול לדירה
+                  </a>
                 </div>
               </Popup>
             </CircleMarker>
