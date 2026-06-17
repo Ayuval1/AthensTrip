@@ -10,6 +10,7 @@ const CATEGORY_COLORS = {
   food: '#F39C12',
   shopping: '#9B59B6',
   fun: '#2980B9',
+  supermarket: '#00897B',
 }
 
 const CATEGORY_LABELS = {
@@ -18,6 +19,7 @@ const CATEGORY_LABELS = {
   food: '🍽️ אוכל',
   shopping: '🛍️ קניות',
   fun: '🎉 בילוי',
+  supermarket: '🛒 סופרים',
 }
 
 function makeIcon(color, emoji) {
@@ -54,6 +56,7 @@ const CATEGORY_EMOJIS = {
   food: '🍽️',
   shopping: '🛍️',
   fun: '🎉',
+  supermarket: '🛒',
 }
 
 export default function InteractiveMap() {
