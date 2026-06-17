@@ -17,8 +17,7 @@ export default function AttractionModal({ attractionId, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center"
-      style={{ background: 'rgba(13,38,68,0.5)' }}
+      style={{ position: 'fixed', inset: 0, zIndex: 3000, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', background: 'rgba(13,38,68,0.5)' }}
       onClick={onClose}
     >
       <div

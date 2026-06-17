@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet'
+﻿import { useState, useRef } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker, Polyline } from 'react-leaflet'
 import L from 'leaflet'
 import { ATTRACTIONS, APARTMENT } from '../data/athens'
 import AttractionModal from './AttractionModal'
+import RoutePlanner from './RoutePlanner'
 
 const CATEGORY_COLORS = {
   historical: '#E74C3C',
@@ -29,14 +30,7 @@ const CATEGORY_LABELS = {
 function makeIcon(color, emoji) {
   return L.divIcon({
     className: '',
-    html: `<div style="
-      background:${color};
-      width:32px;height:32px;border-radius:50% 50% 50% 0;
-      transform:rotate(-45deg);
-      border:2px solid white;
-      box-shadow:0 2px 6px rgba(0,0,0,0.3);
-      display:flex;align-items:center;justify-content:center;
-    "><span style="transform:rotate(45deg);font-size:14px;display:block;text-align:center;line-height:28px;">${emoji}</span></div>`,
+    html: `<div style="background:${color};width:32px;height:32px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(45deg);font-size:14px;display:block;text-align:center;line-height:28px;">${emoji}</span></div>`,
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -36],
@@ -45,24 +39,14 @@ function makeIcon(color, emoji) {
 
 const HOME_ICON = L.divIcon({
   className: '',
-  html: `<div style="
-    background:#1B4F8C;width:36px;height:36px;border-radius:50%;
-    border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.4);
-    display:flex;align-items:center;justify-content:center;font-size:18px;
-  ">🏠</div>`,
+  html: `<div style="background:#1B4F8C;width:36px;height:36px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:18px;">🏠</div>`,
   iconSize: [36, 36],
   iconAnchor: [18, 18],
 })
 
 const CATEGORY_EMOJIS = {
-  historical: '🏛️',
-  nature: '🌿',
-  food: '🍽️',
-  shopping: '🛍️',
-  fun: '🎉',
-  supermarket: '🛒',
-  metro: '🚇',
-  bus: '🚌',
+  historical: '🏛️', nature: '🌿', food: '🍽️', shopping: '🛍️',
+  fun: '🎉', supermarket: '🛒', metro: '🚇', bus: '🚌',
 }
 
 export default function InteractiveMap() {
@@ -70,6 +54,7 @@ export default function InteractiveMap() {
   const [activeCategories, setActiveCategories] = useState(Object.keys(CATEGORY_COLORS))
   const [userPos, setUserPos] = useState(null)
   const [locating, setLocating] = useState(false)
+  const [routeGeometry, setRouteGeometry] = useState(null)
   const mapRef = useRef(null)
 
   function toggleCategory(cat) {
@@ -101,15 +86,9 @@ export default function InteractiveMap() {
 
       <div className="flex gap-1.5 px-3 pt-3 pb-2 overflow-x-auto flex-shrink-0">
         {Object.entries(CATEGORY_LABELS).map(([cat, label]) => (
-          <button
-            key={cat}
-            onClick={() => toggleCategory(cat)}
+          <button key={cat} onClick={() => toggleCategory(cat)}
             className="flex-shrink-0 text-xs px-2.5 py-1 rounded-full font-medium transition-all"
-            style={{
-              background: activeCategories.includes(cat) ? CATEGORY_COLORS[cat] : 'rgba(0,0,0,0.06)',
-              color: activeCategories.includes(cat) ? 'white' : '#666',
-            }}
-          >
+            style={{ background: activeCategories.includes(cat) ? CATEGORY_COLORS[cat] : 'rgba(0,0,0,0.06)', color: activeCategories.includes(cat) ? 'white' : '#666' }}>
             {label}
           </button>
         ))}
@@ -117,83 +96,43 @@ export default function InteractiveMap() {
 
       <div className="flex-1 px-3 pb-3 relative">
         <div style={{ position: 'absolute', bottom: '20px', left: '20px', zIndex: 1000, display: 'flex', gap: '8px' }}>
-          <button
-            onClick={handleLocate}
-            disabled={locating}
-            className="text-xs px-3 py-2 rounded-xl font-medium"
-            style={{
-              background: userPos ? '#27AE60' : '#1B4F8C',
-              color: 'white',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          >
+          <button onClick={handleLocate} disabled={locating} className="text-xs px-3 py-2 rounded-xl font-medium"
+            style={{ background: userPos ? '#27AE60' : '#1B4F8C', color: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.3)', border: 'none', cursor: 'pointer' }}>
             {locating ? '⏳' : '📍'} {locating ? 'מאתר...' : 'מיקומי'}
           </button>
-          <button
-            onClick={() => mapRef.current?.flyTo(APARTMENT.coords, 17)}
-            className="text-xs px-3 py-2 rounded-xl font-medium"
-            style={{
-              background: '#C9A84C',
-              color: 'white',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          >
+          <button onClick={() => mapRef.current?.flyTo(APARTMENT.coords, 17)} className="text-xs px-3 py-2 rounded-xl font-medium"
+            style={{ background: '#C9A84C', color: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.3)', border: 'none', cursor: 'pointer' }}>
             🏠 דירה
           </button>
         </div>
 
-        <MapContainer
-          ref={mapRef}
-          center={[37.9715, 23.7267]}
-          zoom={14}
-          style={{ height: '100%', minHeight: '400px', borderRadius: '16px' }}
-        >
+        <RoutePlanner onRoute={geometry => setRouteGeometry(geometry)} onClear={() => setRouteGeometry(null)} />
+
+        <MapContainer ref={mapRef} center={[37.9715, 23.7267]} zoom={14}
+          style={{ height: '100%', minHeight: '400px', borderRadius: '16px' }}>
           <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; OpenStreetMap'
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+            attribution="&copy; OpenStreetMap &copy; CARTO"
           />
 
           <Marker position={APARTMENT.coords} icon={HOME_ICON}>
             <Popup>
               <div style={{ fontFamily: 'Heebo', direction: 'rtl', textAlign: 'right' }}>
                 <strong>🏠 הדירה שלנו</strong>
-                <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#666' }}>
-                  {APARTMENT.neighborhood}
-                </p>
+                <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#666' }}>{APARTMENT.neighborhood}</p>
               </div>
             </Popup>
           </Marker>
 
           {userPos && (
-            <CircleMarker
-              center={userPos}
-              radius={10}
-              pathOptions={{ color: '#1B4F8C', fillColor: '#4A90D9', fillOpacity: 0.85, weight: 2 }}
-            >
+            <CircleMarker center={userPos} radius={10}
+              pathOptions={{ color: '#1B4F8C', fillColor: '#4A90D9', fillOpacity: 0.85, weight: 2 }}>
               <Popup>
                 <div style={{ fontFamily: 'Heebo', direction: 'rtl', textAlign: 'right', minWidth: '140px' }}>
-                  <strong>📍 אתם כאן</strong>
-                  <br />
-                  <a
-                    href={`https://www.google.com/maps/dir/?api=1&origin=${userPos[0]},${userPos[1]}&destination=${APARTMENT.coords[0]},${APARTMENT.coords[1]}&travelmode=walking`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'inline-block',
-                      marginTop: '6px',
-                      background: '#C9A84C',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '8px',
-                      padding: '4px 10px',
-                      fontSize: '12px',
-                      textDecoration: 'none',
-                    }}
-                  >
+                  <strong>📍 אתם כאן</strong><br />
+                  <a href={`https://www.google.com/maps/dir/?api=1&origin=${userPos[0]},${userPos[1]}&destination=${APARTMENT.coords[0]},${APARTMENT.coords[1]}&travelmode=walking`}
+                    target="_blank" rel="noopener noreferrer"
+                    style={{ display: 'inline-block', marginTop: '6px', background: '#C9A84C', color: 'white', border: 'none', borderRadius: '8px', padding: '4px 10px', fontSize: '12px', textDecoration: 'none' }}>
                     🏠 מסלול לדירה
                   </a>
                 </div>
@@ -202,30 +141,32 @@ export default function InteractiveMap() {
           )}
 
           {visible.map(attraction => (
-            <Marker
-              key={attraction.id}
-              position={attraction.coords}
+            <Marker key={attraction.id} position={attraction.coords}
               icon={makeIcon(CATEGORY_COLORS[attraction.category], attraction.emoji || CATEGORY_EMOJIS[attraction.category])}
-              eventHandlers={{ click: () => setModalId(attraction.id) }}
-            >
+              eventHandlers={{ click: () => setModalId(attraction.id) }}>
               <Popup>
                 <div style={{ fontFamily: 'Heebo', direction: 'rtl', textAlign: 'right', minWidth: '140px' }}>
                   <strong style={{ color: '#0D2644' }}>{attraction.name}</strong>
                   <p style={{ margin: '4px 0', fontSize: '12px', color: '#666' }}>{attraction.hours}</p>
-                  <button
-                    onClick={() => setModalId(attraction.id)}
-                    style={{
-                      background: '#1B4F8C', color: 'white',
-                      border: 'none', borderRadius: '8px',
-                      padding: '4px 10px', fontSize: '12px', cursor: 'pointer', marginTop: '4px',
-                    }}
-                  >
+                  <button onClick={() => setModalId(attraction.id)}
+                    style={{ background: '#1B4F8C', color: 'white', border: 'none', borderRadius: '8px', padding: '4px 10px', fontSize: '12px', cursor: 'pointer', marginTop: '4px' }}>
                     פרטים נוספים
                   </button>
                 </div>
               </Popup>
             </Marker>
           ))}
+
+          {routeGeometry && routeGeometry.length > 1 && (
+            <>
+              <Polyline positions={routeGeometry} pathOptions={{ color: '#000', weight: 6, opacity: 0.2 }} />
+              <Polyline positions={routeGeometry} pathOptions={{ color: '#1B4F8C', weight: 4, opacity: 0.9, dashArray: '10,5' }} />
+              <CircleMarker center={routeGeometry[0]} radius={8}
+                pathOptions={{ fillColor: '#27AE60', color: '#fff', weight: 2, fillOpacity: 1 }} />
+              <CircleMarker center={routeGeometry[routeGeometry.length - 1]} radius={8}
+                pathOptions={{ fillColor: '#DC2626', color: '#fff', weight: 2, fillOpacity: 1 }} />
+            </>
+          )}
         </MapContainer>
       </div>
     </div>
