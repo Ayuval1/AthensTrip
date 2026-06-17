@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import { useState, useRef } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet'
 import L from 'leaflet'
 import { ATTRACTIONS, APARTMENT } from '../data/athens'
 import AttractionModal from './AttractionModal'
@@ -61,13 +61,29 @@ const CATEGORY_EMOJIS = {
 
 export default function InteractiveMap() {
   const [modalId, setModalId] = useState(null)
-  const [activeCategories, setActiveCategories] = useState(
-    Object.keys(CATEGORY_COLORS)
-  )
+  const [activeCategories, setActiveCategories] = useState(Object.keys(CATEGORY_COLORS))
+  const [userPos, setUserPos] = useState(null)
+  const [locating, setLocating] = useState(false)
+  const mapRef = useRef(null)
 
   function toggleCategory(cat) {
     setActiveCategories(prev =>
       prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    )
+  }
+
+  function handleLocate() {
+    if (!navigator.geolocation) return
+    setLocating(true)
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const latlng = [pos.coords.latitude, pos.coords.longitude]
+        setUserPos(latlng)
+        setLocating(false)
+        mapRef.current?.flyTo(latlng, 16)
+      },
+      () => setLocating(false),
+      { enableHighAccuracy: true, timeout: 8000 }
     )
   }
 
@@ -93,8 +109,23 @@ export default function InteractiveMap() {
         ))}
       </div>
 
-      <div className="flex-1 px-3 pb-3">
+      <div className="flex-1 px-3 pb-3 relative">
+        <button
+          onClick={handleLocate}
+          disabled={locating}
+          className="absolute z-10 text-xs px-3 py-2 rounded-xl font-medium"
+          style={{
+            bottom: '24px', left: '24px',
+            background: userPos ? '#27AE60' : '#1B4F8C',
+            color: 'white',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+          }}
+        >
+          {locating ? '⏳' : '📍'} {locating ? 'מאתר...' : 'מיקומי'}
+        </button>
+
         <MapContainer
+          ref={mapRef}
           center={[37.9715, 23.7267]}
           zoom={14}
           style={{ height: '100%', minHeight: '400px', borderRadius: '16px' }}
@@ -114,6 +145,20 @@ export default function InteractiveMap() {
               </div>
             </Popup>
           </Marker>
+
+          {userPos && (
+            <CircleMarker
+              center={userPos}
+              radius={10}
+              pathOptions={{ color: '#1B4F8C', fillColor: '#4A90D9', fillOpacity: 0.85, weight: 2 }}
+            >
+              <Popup>
+                <div style={{ fontFamily: 'Heebo', direction: 'rtl', textAlign: 'right' }}>
+                  <strong>📍 אתם כאן</strong>
+                </div>
+              </Popup>
+            </CircleMarker>
+          )}
 
           {visible.map(attraction => (
             <Marker
