@@ -31,7 +31,7 @@ export const FLIGHT_INFO = {
 export const APARTMENT = {
   neighborhood: 'קולונקי (Kolonaki)',
   address: 'Alopekis 20, אתונה 10675, יוון',
-  coords: [37.9763, 23.7398],
+  coords: [37.9774, 23.7439],
   notes: [
     'Alopekis 20, Athens 10675',
     'סופר Sporo — 6 דקות הליכה',
