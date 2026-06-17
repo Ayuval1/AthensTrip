@@ -1,19 +1,195 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ITINERARY, ATTRACTIONS, APARTMENT } from '../data/athens'
 import WeatherWidget from './WeatherWidget'
 import AttractionModal from './AttractionModal'
 
 export default function DayItinerary() {
+  const [itinerary, setItinerary] = useState(ITINERARY)
   const [selectedDay, setSelectedDay] = useState(0)
   const [modalId, setModalId] = useState(null)
   const [showApartment, setShowApartment] = useState(false)
+  const [editingEvent, setEditingEvent] = useState(null)
+  const [editForm, setEditForm] = useState({ time: '', title: '', important: false })
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState(false)
 
-  const day = ITINERARY[selectedDay]
+  useEffect(() => {
+    fetch('/api/itinerary')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (Array.isArray(data) && data.length) setItinerary(data) })
+      .catch(() => {})
+  }, [])
+
+  const day = itinerary[selectedDay]
+
+  function openEdit(dayIdx, eventIdx) {
+    const event = itinerary[dayIdx].events[eventIdx]
+    setEditForm({ time: event.time, title: event.title, important: event.important || false })
+    setEditingEvent({ dayIdx, eventIdx })
+    setSaveError(false)
+  }
+
+  function openAddEvent(dayIdx) {
+    setEditForm({ time: '', title: '', important: false })
+    setEditingEvent({ dayIdx, eventIdx: -1 })
+    setSaveError(false)
+  }
+
+  async function saveEdit() {
+    if (!editingEvent) return
+    const { dayIdx, eventIdx } = editingEvent
+
+    const newItinerary = itinerary.map((d, di) => {
+      if (di !== dayIdx) return d
+      let newEvents
+      if (eventIdx === -1) {
+        newEvents = [...d.events, { time: editForm.time, title: editForm.title, important: editForm.important || undefined }]
+        newEvents.sort((a, b) => a.time.localeCompare(b.time))
+      } else {
+        newEvents = d.events.map((ev, ei) =>
+          ei === eventIdx
+            ? { ...ev, time: editForm.time, title: editForm.title, important: editForm.important || undefined }
+            : ev
+        )
+      }
+      return { ...d, events: newEvents }
+    })
+
+    setSaving(true)
+    setSaveError(false)
+    try {
+      const r = await fetch('/api/itinerary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newItinerary),
+      })
+      if (r.ok) {
+        setItinerary(newItinerary)
+        setEditingEvent(null)
+      } else {
+        setSaveError(true)
+      }
+    } catch {
+      setSaveError(true)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function deleteEvent() {
+    if (!editingEvent || editingEvent.eventIdx === -1) return
+    const { dayIdx, eventIdx } = editingEvent
+
+    const newItinerary = itinerary.map((d, di) =>
+      di !== dayIdx ? d : { ...d, events: d.events.filter((_, ei) => ei !== eventIdx) }
+    )
+
+    setSaving(true)
+    setSaveError(false)
+    try {
+      const r = await fetch('/api/itinerary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newItinerary),
+      })
+      if (r.ok) {
+        setItinerary(newItinerary)
+        setEditingEvent(null)
+      } else {
+        setSaveError(true)
+      }
+    } catch {
+      setSaveError(true)
+    } finally {
+      setSaving(false)
+    }
+  }
 
   return (
     <div className="flex flex-col h-full">
       {modalId && <AttractionModal attractionId={modalId} onClose={() => setModalId(null)} />}
 
+      {/* Edit modal */}
+      {editingEvent && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center"
+          style={{ background: 'rgba(0,0,0,0.4)' }}
+          onClick={() => setEditingEvent(null)}
+        >
+          <div
+            className="bg-white w-full max-w-sm rounded-t-2xl p-6 pb-10"
+            style={{ direction: 'rtl' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="text-base font-medium mb-4" style={{ fontFamily: 'Rubik', color: '#0D2644' }}>
+              {editingEvent.eventIdx === -1 ? '➕ פעילות חדשה' : '✏️ עריכת פעילות'}
+            </div>
+
+            <input
+              type="text"
+              value={editForm.time}
+              onChange={e => setEditForm(f => ({ ...f, time: e.target.value }))}
+              placeholder="שעה (למשל 10:00)"
+              className="w-full px-3 py-2.5 rounded-xl text-sm mb-3 outline-none"
+              style={{ border: '1px solid rgba(27,79,140,0.2)', color: '#0D2644', fontFamily: 'Heebo' }}
+            />
+            <textarea
+              value={editForm.title}
+              onChange={e => setEditForm(f => ({ ...f, title: e.target.value }))}
+              placeholder="תיאור הפעילות"
+              rows={2}
+              className="w-full px-3 py-2.5 rounded-xl text-sm mb-3 outline-none resize-none"
+              style={{ border: '1px solid rgba(27,79,140,0.2)', color: '#0D2644', fontFamily: 'Heebo' }}
+            />
+            <label className="flex items-center gap-2 mb-4 text-sm cursor-pointer" style={{ color: '#555' }}>
+              <input
+                type="checkbox"
+                checked={editForm.important}
+                onChange={e => setEditForm(f => ({ ...f, important: e.target.checked }))}
+                className="w-4 h-4"
+              />
+              חשוב (מסמן בזהב)
+            </label>
+
+            {saveError && (
+              <p className="text-xs mb-3 text-red-500">שגיאה בשמירה — בדקו הגדרות JSONBin</p>
+            )}
+
+            <div className="flex gap-2">
+              <button
+                onClick={saveEdit}
+                disabled={saving || !editForm.title.trim()}
+                className="flex-1 py-3 rounded-xl text-sm font-medium"
+                style={{
+                  background: saving || !editForm.title.trim() ? 'rgba(27,79,140,0.3)' : '#1B4F8C',
+                  color: 'white',
+                }}
+              >
+                {saving ? 'שומר...' : 'שמור'}
+              </button>
+              {editingEvent.eventIdx !== -1 && (
+                <button
+                  onClick={deleteEvent}
+                  disabled={saving}
+                  className="px-4 py-3 rounded-xl text-sm font-medium"
+                  style={{ background: '#FEE2E2', color: '#DC2626' }}
+                >
+                  מחק
+                </button>
+              )}
+              <button
+                onClick={() => setEditingEvent(null)}
+                className="px-4 py-3 rounded-xl text-sm"
+                style={{ background: 'rgba(0,0,0,0.06)', color: '#666' }}
+              >
+                ביטול
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Apartment modal */}
       {showApartment && (
         <div
           className="fixed inset-0 z-50 flex items-end justify-center"
@@ -51,7 +227,7 @@ export default function DayItinerary() {
       <div className="meander mx-4 my-3" />
 
       <div className="flex gap-2 px-4 overflow-x-auto pb-2">
-        {ITINERARY.map((d, i) => (
+        {itinerary.map((d, i) => (
           <button
             key={d.date}
             onClick={() => setSelectedDay(i)}
@@ -114,9 +290,29 @@ export default function DayItinerary() {
                     </button>
                   )}
                 </div>
+                <button
+                  onClick={() => openEdit(selectedDay, i)}
+                  className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs mt-1"
+                  style={{ background: 'rgba(27,79,140,0.07)', color: '#9BA8BE' }}
+                  title="עריכה"
+                >
+                  ✏️
+                </button>
               </div>
             )
           })}
+
+          <button
+            onClick={() => openAddEvent(selectedDay)}
+            className="flex items-center gap-2 text-xs px-3 py-2 rounded-xl mt-1 w-full justify-center"
+            style={{
+              color: '#1B4F8C',
+              background: 'rgba(27,79,140,0.04)',
+              border: '1px dashed rgba(27,79,140,0.25)',
+            }}
+          >
+            ＋ הוסף פעילות
+          </button>
         </div>
       </div>
     </div>
