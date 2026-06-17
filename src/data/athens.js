@@ -338,7 +338,7 @@ export const ATTRACTIONS = [
     id: 'bus-kolonaki',
     name: 'תחנת אוטובוס — כיכר קולונקי',
     nameEl: 'Bus Stop Kolonaki Square',
-    coords: [37.9756, 23.7393],
+    coords: [37.9769, 23.7408],
     category: 'bus',
     emoji: '🚌',
     description: 'תחנה מרכזית בשכונה. קו 060 — מחבר לסינטגמה ולשכונות הדרומיות.',
