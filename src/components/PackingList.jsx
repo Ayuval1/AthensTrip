@@ -284,7 +284,7 @@ export default function PackingList() {
                   >
                     <button
                       onClick={() => toggle(item.id)}
-                      className="flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all"
+                      className="flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all"
                       style={{
                         borderColor: item.checked ? '#059669' : 'rgba(27,79,140,0.25)',
                         background: item.checked ? '#059669' : 'transparent',
@@ -344,7 +344,7 @@ export default function PackingList() {
           <div key={item.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl mb-1.5"
             style={{ background: item.checked ? 'rgba(5,150,105,0.07)' : 'white', border: '1px solid rgba(27,79,140,0.08)' }}>
             <button onClick={() => toggle(item.id)}
-              className="flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center"
+              className="flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center"
               style={{ borderColor: item.checked ? '#059669' : 'rgba(27,79,140,0.25)', background: item.checked ? '#059669' : 'transparent' }}>
               {item.checked && <span style={{ color: 'white', fontSize: '11px' }}>✓</span>}
             </button>

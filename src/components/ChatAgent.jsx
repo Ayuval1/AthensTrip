@@ -46,7 +46,7 @@ export default function ChatAgent() {
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto px-4 pt-4 pb-2 flex flex-col gap-3">
         {messages.map((msg, i) => (
-          <div key={i} className={`flex ${msg.role === 'user' ? 'justify-start' : 'justify-end'}`}>
+          <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
               className="max-w-xs px-4 py-2.5 rounded-2xl text-sm leading-relaxed"
               style={{

@@ -72,7 +72,7 @@ export default function InteractiveMap() {
       <div className="flex gap-1.5 px-3 pt-3 pb-2 overflow-x-auto flex-shrink-0">
         {Object.entries(CATEGORY_LABELS).map(([cat, label]) => (
           <button key={cat} onClick={() => toggleCategory(cat)}
-            className="flex-shrink-0 text-xs px-2.5 py-1 rounded-full font-medium transition-all"
+            className="flex-shrink-0 text-xs px-2.5 py-2 rounded-full font-medium transition-all"
             style={{ background: activeCategories.includes(cat) ? CATEGORY_COLORS[cat] : 'rgba(0,0,0,0.06)', color: activeCategories.includes(cat) ? 'white' : '#666' }}>
             {label}
           </button>
