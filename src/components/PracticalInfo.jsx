@@ -67,7 +67,7 @@ export default function PracticalInfo() {
             <p className="text-sm font-medium mb-1" style={{ color: '#1B4F8C' }}>{t.title}</p>
             <ul className="space-y-1">
               {t.tips.map((tip, i) => (
-                <li key={i} className="text-xs" style={{ color: '#0D2644' }}>• {tip}</li>
+                <li key={i} className="text-sm" style={{ color: '#0D2644' }}>• {tip}</li>
               ))}
             </ul>
           </div>

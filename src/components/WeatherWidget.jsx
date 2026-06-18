@@ -57,7 +57,7 @@ export default function WeatherWidget() {
 
   return (
     <div>
-      <p className="text-xs mb-2" style={{ color: '#4A90D9' }}>מזג אוויר — אתונה</p>
+      <p className="text-sm font-medium mb-2" style={{ color: '#4A90D9' }}>☁️ מזג אוויר — אתונה</p>
       <div className="flex gap-2 overflow-x-auto pb-1">
         {weather.map(day => (
           <div

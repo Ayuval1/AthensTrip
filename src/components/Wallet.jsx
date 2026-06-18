@@ -68,7 +68,7 @@ export default function Wallet() {
         className="rounded-2xl p-5 mb-4"
         style={{ background: '#0D2644', color: 'white' }}
       >
-        <p className="text-xs mb-1" style={{ opacity: 0.6 }}>תקציב כולל</p>
+        <p className="text-sm mb-1" style={{ opacity: 0.7 }}>תקציב כולל</p>
         {editingBudget ? (
           <div className="flex gap-2 items-center mb-3">
             <input

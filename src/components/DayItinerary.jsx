@@ -249,12 +249,12 @@ export default function DayItinerary() {
             style={{
               background: selectedDay === i ? '#1B4F8C' : 'rgba(27,79,140,0.08)',
               color: selectedDay === i ? 'white' : '#1B4F8C',
-              minWidth: '60px',
+              minWidth: '64px',
             }}
           >
-            <span>{d.emoji}</span>
-            <span>{d.day}</span>
-            <span style={{ opacity: 0.8 }}>{d.date}</span>
+            <span style={{ fontSize: '18px' }}>{d.emoji}</span>
+            <span className="font-semibold">{d.day}</span>
+            <span style={{ opacity: 0.7, fontSize: '10px' }}>{d.date}</span>
           </button>
         ))}
       </div>
@@ -306,7 +306,7 @@ export default function DayItinerary() {
                 </div>
                 <button
                   onClick={() => openEdit(selectedDay, i)}
-                  className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs mt-1"
+                  className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs mt-1"
                   style={{ background: 'rgba(27,79,140,0.07)', color: '#9BA8BE' }}
                   title="עריכה"
                 >
@@ -318,7 +318,7 @@ export default function DayItinerary() {
 
           <button
             onClick={() => openAddEvent(selectedDay)}
-            className="flex items-center gap-2 text-xs px-3 py-2 rounded-xl mt-1 w-full justify-center"
+            className="flex items-center gap-2 text-sm px-3 py-3 rounded-xl mt-1 w-full justify-center"
             style={{
               color: '#1B4F8C',
               background: 'rgba(27,79,140,0.04)',

@@ -23,12 +23,12 @@ export default function App() {
     <div style={{ background: '#F5F0E8', maxWidth: '480px', margin: '0 auto', minHeight: '100svh', display: 'flex', flexDirection: 'column', position: 'relative', boxShadow: '0 0 40px rgba(13,38,68,0.12)' }}>
       <header style={{ padding: '20px 16px 12px', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '28px' }}>🏛️</span>
+          <span style={{ fontSize: '34px' }}>🏛️</span>
           <div>
-            <h1 style={{ fontFamily: 'Rubik', color: '#0D2644', fontSize: '20px', fontWeight: 500, margin: 0, lineHeight: 1.2 }}>
+            <h1 style={{ fontFamily: 'Rubik', color: '#0D2644', fontSize: '24px', fontWeight: 600, margin: 0, lineHeight: 1.2 }}>
               אתונה 2026
             </h1>
-            <p style={{ color: '#4A90D9', fontSize: '12px', margin: 0 }}>19–23 יוני • משפחת עמר</p>
+            <p style={{ color: '#4A90D9', fontSize: '13px', margin: 0, fontWeight: 500 }}>19–23 יוני • משפחת עמר</p>
           </div>
         </div>
         <div className="meander" style={{ marginTop: '12px' }} />
