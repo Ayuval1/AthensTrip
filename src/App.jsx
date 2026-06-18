@@ -20,7 +20,7 @@ export default function App() {
   const [tab, setTab] = useState('itinerary')
 
   return (
-    <div style={{ background: '#F5F0E8', maxWidth: '480px', margin: '0 auto', minHeight: '100svh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+    <div style={{ background: '#F5F0E8', maxWidth: '480px', margin: '0 auto', minHeight: '100svh', display: 'flex', flexDirection: 'column', position: 'relative', boxShadow: '0 0 40px rgba(13,38,68,0.12)' }}>
       <header style={{ padding: '20px 16px 12px', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '28px' }}>🏛️</span>

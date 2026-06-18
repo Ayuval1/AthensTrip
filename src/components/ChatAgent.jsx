@@ -48,8 +48,9 @@ export default function ChatAgent() {
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
-              className="max-w-xs px-4 py-2.5 rounded-2xl text-sm leading-relaxed"
+              className="px-4 py-2.5 rounded-2xl text-sm leading-relaxed"
               style={{
+                maxWidth: '80%',
                 background: msg.role === 'user' ? '#1B4F8C' : 'white',
                 color: msg.role === 'user' ? 'white' : '#0D2644',
                 borderBottomRightRadius: msg.role === 'user' ? '4px' : '16px',
@@ -66,7 +67,7 @@ export default function ChatAgent() {
         ))}
 
         {loading && (
-          <div className="flex justify-end">
+          <div className="flex justify-start">
             <div className="px-4 py-3 rounded-2xl" style={{ background: 'white', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
               <span className="inline-flex gap-1">
                 <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: '#1B4F8C', animationDelay: '0ms' }} />
