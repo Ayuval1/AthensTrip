@@ -195,7 +195,7 @@ export default function PackingList() {
       {/* Person selector */}
       <div
         ref={personBarRef}
-        className="flex gap-2 px-4 pt-3 pb-2 overflow-x-auto flex-shrink-0"
+        className="flex gap-1.5 px-3 pt-3 pb-2 overflow-x-auto flex-shrink-0"
         style={{ scrollbarWidth: 'none' }}
       >
         {PEOPLE.map(p => {
@@ -206,11 +206,11 @@ export default function PackingList() {
             <button
               key={p.id}
               onClick={() => { setSelectedPerson(p.id); setShowAdd(false); setEditId(null) }}
-              className="flex-shrink-0 flex flex-col items-center gap-0.5 px-3 py-2 rounded-2xl transition-all"
+              className="flex-shrink-0 flex flex-col items-center gap-0.5 px-2 py-2 rounded-2xl transition-all"
               style={{
                 background: isSelected ? '#1B4F8C' : 'white',
                 border: `1px solid ${isSelected ? '#1B4F8C' : 'rgba(27,79,140,0.15)'}`,
-                minWidth: '60px',
+                minWidth: '52px',
               }}
             >
               <span style={{ fontSize: '20px' }}>{p.emoji}</span>
@@ -286,7 +286,7 @@ export default function PackingList() {
                       onClick={() => toggle(item.id)}
                       className="flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all"
                       style={{
-                        borderColor: item.checked ? '#059669' : 'rgba(27,79,140,0.25)',
+                        borderColor: item.checked ? '#059669' : 'rgba(27,79,140,0.5)',
                         background: item.checked ? '#059669' : 'transparent',
                       }}
                     >
@@ -345,7 +345,7 @@ export default function PackingList() {
             style={{ background: item.checked ? 'rgba(5,150,105,0.07)' : 'white', border: '1px solid rgba(27,79,140,0.08)' }}>
             <button onClick={() => toggle(item.id)}
               className="flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center"
-              style={{ borderColor: item.checked ? '#059669' : 'rgba(27,79,140,0.25)', background: item.checked ? '#059669' : 'transparent' }}>
+              style={{ borderColor: item.checked ? '#059669' : 'rgba(27,79,140,0.5)', background: item.checked ? '#059669' : 'transparent' }}>
               {item.checked && <span style={{ color: 'white', fontSize: '11px' }}>✓</span>}
             </button>
             <span className="flex-1 text-sm" style={{ color: item.checked ? '#6B7280' : '#0D2644', textDecoration: item.checked ? 'line-through' : 'none' }}>{item.label}</span>
